@@ -52,7 +52,6 @@ function initAddToCart() {
         let isNew = true;
         if (getCart.color != '' && getCart.quantity >= 1 && getCart.quantity <= 100) {
             tab = tab.map(t => {
-                console.log(t, getCart);
                 if (t.id === getCart.id && t.color === getCart.color) {
                     t.quantity += getCart.quantity;
                     isNew = false;

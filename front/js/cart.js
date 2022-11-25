@@ -27,7 +27,7 @@ const displaySofa = (sofaData) => {
     let mySofa = new Map();
     let i = 0
     cart.forEach(article=>{ 
-        let articleFund = sofaData.find(a => a._id === article.id);
+        const articleFund = sofaData.find(a => a._id === article.id);
         mySofa.set(i++,{
             id : article.id,
             sofaName: article.name,
@@ -40,7 +40,7 @@ const displaySofa = (sofaData) => {
         })
         return mySofa
     })
-    console.log(mySofa)
+    
     mySofa.forEach(s =>{    
         displayCart.innerHTML += `<article class="cart__item" data-id="${s.id}" data-color="${s.color}">
         <div class="cart__item__img"><img src="${s.image}" alt="${s.alt}"></div>
@@ -59,16 +59,49 @@ const displaySofa = (sofaData) => {
     totalArticle();
     
     let getQuantities    = document.querySelectorAll('.itemQuantity');
-    
+    let newCart = [];
     for (const getQuantity of getQuantities) {
         getQuantity.addEventListener('input',(e) =>{
-            var quantityUpdate = e.target.value;
-            const quantityUpdateId = e.target.parentElement.parentElement.parentElement.parentElement.getAttribute('data-id');
-            const quantityUpdateColor = e.target.parentElement.parentElement.parentElement.parentElement.getAttribute('data-color');
-            mySofa.map
-            // mySofa.find(i => {i.id === getQuantities.dataset.id});
-            // mySofa.set(quantity, {quantityUpdate})
-            console.log(mySofa);
+            let newItems = {
+            id : e.target.parentElement.parentElement.parentElement.parentElement.getAttribute('data-id'),
+            color : e.target.parentElement.parentElement.parentElement.parentElement.getAttribute('data-color'),
+            quantity : Number(e.target.value)
+            }
+            newCart.push(newItems)
+            let isNew = true
+            cart = cart.map(t =>{
+                if (t.id === newItems.id && t.color === newItems.color && newItems.quantity!= 0) {
+                    t.quantity = newItems.quantity;
+                    isNew = false
+                }
+                if (isNew || cart.quantity == 0) {
+                    cart.filter(c => {
+                        c.quantity == 0
+                        return true
+                    })
+                }
+                return t
+            });
+            
+            window.location.reload()
+            window.localStorage.setItem("tab", JSON.stringify(cart));
+
+                // let cartUpdate = cart.find(a => {
+                //     a._id === v.id;
+                //     a.color === v.color;
+                // });
+                // if (condition) {
+                    
+                // }
+            
+            // console.log(cart)
+            // let result = cart.filter(val => {
+            //     val.id = quantityUpdateId;
+            //     val.color = quantityUpdateColor;
+            //     console.log(val.id, quantityUpdateId);
+            //     return
+            // }).map(q => )
+            
         })
     }
     // console.log(quantityUpdate);
