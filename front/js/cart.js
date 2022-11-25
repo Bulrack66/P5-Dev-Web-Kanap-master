@@ -86,25 +86,9 @@ const displaySofa = (sofaData) => {
             window.location.reload()
             window.localStorage.setItem("tab", JSON.stringify(cart));
 
-                // let cartUpdate = cart.find(a => {
-                //     a._id === v.id;
-                //     a.color === v.color;
-                // });
-                // if (condition) {
-                    
-                // }
-            
-            // console.log(cart)
-            // let result = cart.filter(val => {
-            //     val.id = quantityUpdateId;
-            //     val.color = quantityUpdateColor;
-            //     console.log(val.id, quantityUpdateId);
-            //     return
-            // }).map(q => )
-            
         })
     }
-    // console.log(quantityUpdate);
+
 }
 
     
