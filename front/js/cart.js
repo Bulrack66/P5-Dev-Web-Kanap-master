@@ -3,6 +3,9 @@ const displayCart  = document.getElementById('cart__items');
 let cart           = JSON.parse(localStorage.getItem("tab"));
 let totalQuantity  = document.getElementById('totalQuantity');
 let totalPriceCart = document.getElementById('totalPrice');
+const sendConfirm = document.getElementsByClassName('cart__order__form__submit');
+const getForms = document.forms;
+let refresh = () => window.location.reload()
 let totalArticle = () => {
     let total = 0
     cart.forEach(a => {
@@ -20,6 +23,7 @@ const getSofa = async () => {
 getSofa()
 
 const displaySofa = (sofaData) => {
+    let timOut = true;
     let mySofa = new Map();
     let i = 0
     cart.forEach(article=>{ 
@@ -60,25 +64,25 @@ const displaySofa = (sofaData) => {
             color : e.target.parentElement.parentElement.parentElement.parentElement.getAttribute('data-color'),
             quantity : Number(e.target.value)
             }
-            console.log(e),
+            // if(cart.quantity === 0){deleteProducts()}
             newCart.push(newItems);
-            let isNew = true;
             cart = cart.map(t =>{
-                if (t.id === newItems.id && t.color === newItems.color && newItems.quantity!= 0 && newItems.quantity <= 100) {
+                if (t.id === newItems.id && t.color === newItems.color && newItems.quantity <= 100) {
                     t.quantity = newItems.quantity;
-                    isNew = false
-                }
-                if (isNew || cart.quantity == 0) {
-                    cart.filter(c => {
-                        c.quantity == 0
-                        return true
+                }else {alert('Vous ne pouvez pas choisir plus de 100 produits!')}
+            return t
+            });
+            if(newItems.quantity == 0){
+                if(confirm('Voulez vous supprimer le produit?')){
+                    cart = cart.filter(cc => {
+                        if(cc.quantity == 0){
+                        return false
+                        }else return true
                     })
                 }
-                return t
-            });
-            window.location.reload()
+            }else{timOut = false}
+            if (timOut){setTimeout(refresh, 3000)}else{setTimeout(refresh, 1000)}
             window.localStorage.setItem("tab", JSON.stringify(cart));
-            
         })
     }
     for (const deleteProduct of deleteProducts) {
@@ -95,5 +99,15 @@ const displaySofa = (sofaData) => {
         })
     }
 }
-console.log(document.forms);
+for (const getAllForms of getForms) {
+    getAllForms.addEventListener('input', (e) => console.log(e))
+}
+
+console.log(getForms)//[0][0]);
+for (const sendConfirms of sendConfirm) {
+    sendConfirms.addEventListener('click', (e) => {
+        window.location = 'confirmation.html'
+        console.log(e)
+    })
+}
 
