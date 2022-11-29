@@ -121,7 +121,7 @@ let a3 = false;
 let a4 = false;
 let a5 = false;
 let sendForm = false;
-
+var formOk = '<div style="font-weight: 600; color: #3aff3a">Valide ✅</div>';
 for (const getAllForms of getForms) {
     getAllForms.addEventListener('input', (e) => {
         
@@ -134,7 +134,7 @@ for (const getAllForms of getForms) {
             errorFirstName.innerHTML = 'Prénom Incorrect (exemple: Jean-Edouard)';
             console.log(testFirstName)
         }else{
-            errorFirstName.innerHTML = '';
+            errorFirstName.innerHTML = formOk;
             a1 = true;
         }        
         
@@ -146,7 +146,7 @@ for (const getAllForms of getForms) {
             errorLastName.innerHTML = 'Nom Incorrect (exemple: Dupont)';
             
         }else{
-            errorLastName.innerHTML = '';
+            errorLastName.innerHTML = formOk;
             a2 = true;
         }
         
@@ -157,7 +157,7 @@ for (const getAllForms of getForms) {
             e.preventDefault();
             errorAdress.innerHTML = 'Adresse Incorrect (exemple: 1 rue Jean Jaures)';
         }else{
-            errorAdress.innerHTML = '';
+            errorAdress.innerHTML = formOk;
             a3 = true;
         }
         
@@ -168,7 +168,7 @@ for (const getAllForms of getForms) {
             e.preventDefault();
             errorCity.innerHTML = 'Ville Incorrect (exemple: Argeles-sur-Mer)';
         }else{
-            errorCity.innerHTML = '';
+            errorCity.innerHTML = formOk;
             a4 = true;
         }
 
@@ -179,7 +179,7 @@ for (const getAllForms of getForms) {
             e.preventDefault();
             errorEmail.innerHTML = 'Email Incorrect (exemple: je.dupont@gmail.com)'
         }else{
-            errorEmail.innerHTML = '';
+            errorEmail.innerHTML = formOk;
             a5 = true;
         }
         
@@ -205,7 +205,7 @@ for (const getAllForms of getForms) {
             console.log(data)
             window.location = 'confirmation.html' + '?orderId=' + data.orderId;
         })
-        }else {alert('Panier vide ou verifiez que le formulaire sois bien remplis')}
+        }else {alert('Panier vide ou verifiez que tout les champs du formulaire sois valide')}
         
     });
 }
