@@ -1,10 +1,25 @@
 const url          = ('http://localhost:3000');
 const displayCart  = document.getElementById('cart__items');
-let cart           = JSON.parse(localStorage.getItem("tab"));
+let cart           = JSON.parse(localStorage.getItem("tab"))
 let totalQuantity  = document.getElementById('totalQuantity');
 let totalPriceCart = document.getElementById('totalPrice');
 const sendConfirm = document.getElementsByClassName('cart__order__form__submit');
 const getForms = document.forms;
+let deleteProducts = document.getElementsByClassName('deleteItem');
+let errorFirstName = document.getElementById('firstNameErrorMsg');
+let errorLastName = document.getElementById('lastNameErrorMsg');
+let errorAdress = document.getElementById('addressErrorMsg');
+let errorCity = document.getElementById('cityErrorMsg');
+let errorEmail = document.getElementById('emailErrorMsg');
+
+
+if (cart == null || cart == '') {
+    let tab = []
+    window.localStorage.setItem("tab", JSON.stringify(tab));
+    cart = JSON.parse(localStorage.getItem("tab"));
+    displayCart.innerHTML = '<h2 style= "display: flex;justify-content: center;border-radius: 10px;padding: 20px;background: white;color: rgb(51, 152, 219);font-weight: bold; padding-left: 10px; width: 53%;margin: 90px auto;">Panier vide ! Allez vite choisir un Kanap! 😉</h2>';
+}
+
 let refresh = () => window.location.reload()
 let totalArticle = () => {
     let total = 0
@@ -23,13 +38,13 @@ const getSofa = async () => {
 getSofa()
 
 const displaySofa = (sofaData) => {
-    let timOut = true;
+    let timOut = false;
     let mySofa = new Map();
     let i = 0
     cart.forEach(article=>{ 
-        const articleFund = sofaData.find(a => a._id === article.id);
+        const articleFund = sofaData.find(a => a._id === article._id);
         mySofa.set(i++,{
-            id : article.id,
+            _id : article._id,
             sofaName: article.name,
             color : article.color,
             quantity : article.quantity,
@@ -41,11 +56,11 @@ const displaySofa = (sofaData) => {
         return mySofa
     })
     mySofa.forEach(s =>{    
-        displayCart.innerHTML += `<article class="cart__item" data-id="${s.id}" data-color="${s.color}">
+        displayCart.innerHTML += `<article class="cart__item" data-id="${s._id}" data-color="${s.color}">
         <div class="cart__item__img"><img src="${s.image}" alt="${s.alt}"></div>
         <div class="cart__item__content"><div class="cart__item__content__description"><h2>${s.sofaName}</h2><p>${s.color}</p>
         <p>${s.price} €</p></div><div class="cart__item__content__settings"><div class="cart__item__content__settings__quantity"><p>Qté :</p>
-        <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${s.quantity}">
+        <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${s.quantity}"><div id="signal"></div>
         </div><div class="cart__item__content__settings__delete"><p class="deleteItem">Supprimer</p></div></div></div></article>`
     });
     let totalSofaCartPrice = 0;
@@ -55,21 +70,21 @@ const displaySofa = (sofaData) => {
     totalPriceCart.innerHTML = totalSofaCartPrice;
     totalArticle();
     let getQuantities = document.querySelectorAll('.itemQuantity');
-    let deleteProducts = document.getElementsByClassName('deleteItem')
+   
     let newCart = [];
     for (const getQuantity of getQuantities) {
         getQuantity.addEventListener('input',(e) => {
             let newItems = {
-            id : e.target.parentElement.parentElement.parentElement.parentElement.getAttribute('data-id'),
+            _id : e.target.parentElement.parentElement.parentElement.parentElement.getAttribute('data-id'),
             color : e.target.parentElement.parentElement.parentElement.parentElement.getAttribute('data-color'),
             quantity : Number(e.target.value)
             }
             // if(cart.quantity === 0){deleteProducts()}
             newCart.push(newItems);
             cart = cart.map(t =>{
-                if (t.id === newItems.id && t.color === newItems.color && newItems.quantity <= 100) {
+                if (t._id === newItems._id && t.color === newItems.color && newItems.quantity <= 100) {
                     t.quantity = newItems.quantity;
-                }else {alert('Vous ne pouvez pas choisir plus de 100 produits!')}
+                }
             return t
             });
             if(newItems.quantity == 0){
@@ -79,8 +94,8 @@ const displaySofa = (sofaData) => {
                         return false
                         }else return true
                     })
-                }
-            }else{timOut = false}
+                }else{timOut = true}
+            }
             if (timOut){setTimeout(refresh, 3000)}else{setTimeout(refresh, 1000)}
             window.localStorage.setItem("tab", JSON.stringify(cart));
         })
@@ -89,25 +104,126 @@ const displaySofa = (sofaData) => {
         deleteProduct.addEventListener('click', (e) => {
             let deleteMySofa = e.path[4].dataset;
             cart = cart.filter(cc => {
-                if(cc.id === deleteMySofa.id && cc.color === deleteMySofa.color){
+                if(cc._id === deleteMySofa.id && cc.color === deleteMySofa.color){
                     return false
                 }else return true
                 })
             window.location.reload()
             window.localStorage.setItem("tab", JSON.stringify(cart));
-            console.log(deleteMySofa.id, deleteMySofa.color);
         })
     }
+    
 }
+
+let a1 = false;
+let a2 = false;
+let a3 = false;
+let a4 = false;
+let a5 = false;
+let sendForm = false;
+
 for (const getAllForms of getForms) {
-    getAllForms.addEventListener('input', (e) => console.log(e))
-}
+    getAllForms.addEventListener('input', (e) => {
+        
+        let firstName   = getAllForms[0].value;
+        let firstNameRegEx = new RegExp(/^[A-Z][A-Za-z\é\è\ê\-]+$/g);
+        let testFirstName = firstNameRegEx.test(firstName);
+        
+        if (!testFirstName) {
+            e.preventDefault();
+            errorFirstName.innerHTML = 'Prénom Incorrect (exemple: Jean-Edouard)';
+            console.log(testFirstName)
+        }else{
+            errorFirstName.innerHTML = '';
+            a1 = true;
+        }        
+        
+        let lastName   = getAllForms[1].value;
+        let lastNameRegEx = new RegExp(/^[A-Z][A-Za-z\é\è\ê\-]+$/g);
+        let testLastName = lastNameRegEx.test(lastName);
+        if (!testLastName) {
+            e.preventDefault();
+            errorLastName.innerHTML = 'Nom Incorrect (exemple: Dupont)';
+            
+        }else{
+            errorLastName.innerHTML = '';
+            a2 = true;
+        }
+        
+        let adress   = getAllForms[2].value;
+        let adressRegEx = new RegExp(/^([1-9][0-9]*(?:-[1-9][0-9]*)*)[\s,-]+(?:(bis|ter|qua)[\s,-]+)?([\w]+[\-\w]*)[\s,]+([-\w].+)$/g);
+        let testAdress = adressRegEx.test(adress);
+        if (!testAdress) {
+            e.preventDefault();
+            errorAdress.innerHTML = 'Adresse Incorrect (exemple: 1 rue Jean Jaures)';
+        }else{
+            errorAdress.innerHTML = '';
+            a3 = true;
+        }
+        
+        let city      = getAllForms[3].value;
+        let cityRegEx = new RegExp(/^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]{3,15}$/g);
+        let testCity = cityRegEx.test(city);
+        if (!testCity) {
+            e.preventDefault();
+            errorCity.innerHTML = 'Ville Incorrect (exemple: Argeles-sur-Mer)';
+        }else{
+            errorCity.innerHTML = '';
+            a4 = true;
+        }
 
-console.log(getForms)//[0][0]);
-for (const sendConfirms of sendConfirm) {
-    sendConfirms.addEventListener('click', (e) => {
-        window.location = 'confirmation.html'
-        console.log(e)
+        var email      = getAllForms[4].value;
+        let emailRegEx = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g);
+        let testEmail = emailRegEx.test(email);
+        if (!testEmail) {
+            e.preventDefault();
+            errorEmail.innerHTML = 'Email Incorrect (exemple: je.dupont@gmail.com)'
+        }else{
+            errorEmail.innerHTML = '';
+            a5 = true;
+        }
+        
+        if (a1 && a2 && a3 && a4 && a5) {
+            sendForm = true
+        }
     })
+    
+    getAllForms.addEventListener('submit', (e) => {
+        e.preventDefault()
+        if (sendForm && cart != null && cart != '') {
+        const body = buildOrder();
+        fetch(url + '/api/products/order', {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json', 
+                'Content-Type': 'application/json' 
+        },
+            body : JSON.stringify(body),
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data)
+            window.location = 'confirmation.html' + '?orderId=' + data.orderId;
+        })
+        }else {alert('Panier vide ou verifiez que le formulaire sois bien remplis')}
+        
+    });
 }
 
+
+function buildOrder() {
+for (const getAllForms of getForms) {
+    
+    let body = {
+        contact : {
+            firstName : getAllForms[0].value , 
+            lastName  : getAllForms[1].value ,
+            address    : getAllForms[2].value ,
+            city      : getAllForms[3].value ,
+            email     : getAllForms[4].value ,
+        },
+        products : cart.map(c => c._id)
+    }
+    return body
+}
+}

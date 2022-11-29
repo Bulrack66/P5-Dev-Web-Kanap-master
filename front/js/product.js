@@ -44,7 +44,7 @@ function initAddToCart() {
             tab = JSON.parse(lTab);
         }
         let getCart = {
-            id       : productId,
+            _id       : productId,
             name     : document.getElementById('title').textContent,
             color    : document.getElementById('colors').value,
             quantity : Number(document.getElementById('quantity').value),
