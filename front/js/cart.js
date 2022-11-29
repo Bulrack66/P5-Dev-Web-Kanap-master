@@ -122,6 +122,7 @@ let a4 = false;
 let a5 = false;
 let sendForm = false;
 var formOk = '<div style="font-weight: 600; color: #3aff3a">Valide ✅</div>';
+var formNok = '<div style="font-weight: 600; color: red">'
 for (const getAllForms of getForms) {
     getAllForms.addEventListener('input', (e) => {
         
@@ -131,7 +132,7 @@ for (const getAllForms of getForms) {
         
         if (!testFirstName) {
             e.preventDefault();
-            errorFirstName.innerHTML = 'Prénom Incorrect (exemple: Jean-Edouard)';
+            errorFirstName.innerHTML = formNok + 'Prénom Incorrect (exemple: Jean-Edouard)</div>';
             console.log(testFirstName)
         }else{
             errorFirstName.innerHTML = formOk;
@@ -143,7 +144,7 @@ for (const getAllForms of getForms) {
         let testLastName = lastNameRegEx.test(lastName);
         if (!testLastName) {
             e.preventDefault();
-            errorLastName.innerHTML = 'Nom Incorrect (exemple: Dupont)';
+            errorLastName.innerHTML = formNok + 'Nom Incorrect (exemple: Dupont)</div>';
             
         }else{
             errorLastName.innerHTML = formOk;
@@ -155,7 +156,7 @@ for (const getAllForms of getForms) {
         let testAdress = adressRegEx.test(adress);
         if (!testAdress) {
             e.preventDefault();
-            errorAdress.innerHTML = 'Adresse Incorrect (exemple: 1 rue Jean Jaures)';
+            errorAdress.innerHTML = formNok + 'Adresse Incorrect (exemple: 1 rue Jean Jaures)</div>';
         }else{
             errorAdress.innerHTML = formOk;
             a3 = true;
@@ -166,7 +167,7 @@ for (const getAllForms of getForms) {
         let testCity = cityRegEx.test(city);
         if (!testCity) {
             e.preventDefault();
-            errorCity.innerHTML = 'Ville Incorrect (exemple: Argeles-sur-Mer)';
+            errorCity.innerHTML = formNok + 'Ville Incorrect (exemple: Argeles-sur-Mer)</div>';
         }else{
             errorCity.innerHTML = formOk;
             a4 = true;
@@ -177,7 +178,7 @@ for (const getAllForms of getForms) {
         let testEmail = emailRegEx.test(email);
         if (!testEmail) {
             e.preventDefault();
-            errorEmail.innerHTML = 'Email Incorrect (exemple: je.dupont@gmail.com)'
+            errorEmail.innerHTML = formNok + 'Email Incorrect (exemple: je.dupont@gmail.com)</div>'
         }else{
             errorEmail.innerHTML = formOk;
             a5 = true;
