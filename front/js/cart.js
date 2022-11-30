@@ -12,7 +12,6 @@ let errorAdress = document.getElementById('addressErrorMsg');
 let errorCity = document.getElementById('cityErrorMsg');
 let errorEmail = document.getElementById('emailErrorMsg');
 
-
 if (cart == null || cart == '') {
     let tab = []
     window.localStorage.setItem("tab", JSON.stringify(tab));
@@ -68,7 +67,9 @@ const displaySofa = (sofaData) => {
         <p>${s.price} €</p></div><div class="cart__item__content__settings"><div class="cart__item__content__settings__quantity"><p>Qté :</p>
         <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${s.quantity}"><div id="signal"></div>
         </div><div class="cart__item__content__settings__delete"><p class="deleteItem">Supprimer</p></div></div></div></article>`
+        console.log(displayCart.closest('article'))
     });
+    
     let totalSofaCartPrice = 0;
     mySofa.forEach(tp =>{
         totalSofaCartPrice += tp.totalPrice;
@@ -109,9 +110,10 @@ const displaySofa = (sofaData) => {
     }
     for (const deleteProduct of deleteProducts) {
         deleteProduct.addEventListener('click', (e) => {
-            let deleteMySofa = e.path[4].dataset;
+            let deleteMySofaId = e.target.parentElement.parentElement.parentElement.parentElement.getAttribute('data-id');
+            let deleteMySofaColor = e.target.parentElement.parentElement.parentElement.parentElement.getAttribute('data-color');
             cart = cart.filter(cc => {
-                if(cc._id === deleteMySofa.id && cc.color === deleteMySofa.color){
+                if(cc._id === deleteMySofaId && cc.color === deleteMySofaColor){
                     return false
                 }else return true
                 })
