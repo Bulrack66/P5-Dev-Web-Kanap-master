@@ -39,7 +39,7 @@ const displaySofa = (sofaData) => {
 function initAddToCart() {
     itemsToCart.addEventListener('click', function(e) {
         let tab = [];
-        const lTab = window.localStorage.getItem('tab');
+        const lTab = localStorage.getItem('tab');
         if (lTab != null) {
             tab = JSON.parse(lTab);
         }
@@ -61,7 +61,7 @@ function initAddToCart() {
             if (isNew){
                 tab.push(getCart);
             }
-            window.localStorage.setItem("tab", JSON.stringify(tab));
+            localStorage.setItem("tab", JSON.stringify(tab));
             window.location = 'cart.html';
         } else {alert('Veuillez choisir correctement une valeur pour la couleur et la quantité')}
     });

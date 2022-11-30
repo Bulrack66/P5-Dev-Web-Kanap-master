@@ -14,7 +14,7 @@ let errorEmail = document.getElementById('emailErrorMsg');
 
 if (cart == null || cart == '') {
     let tab = []
-    window.localStorage.setItem("tab", JSON.stringify(tab));
+    localStorage.setItem("tab", JSON.stringify(tab));
     cart = JSON.parse(localStorage.getItem("tab"));
     displayCart.innerHTML = '<h2 style= "display: flex;justify-content: center;border-radius: 10px;padding: 20px;background: white;color: rgb(51, 152, 219);font-weight: bold; padding-left: 10px; width: 53%;margin: 90px auto;">Panier vide ! Allez vite choisir un Kanap! 😉</h2>';
 }
@@ -22,7 +22,7 @@ cart.map(c => {
     if(c.quantity > 100){
         c.quantity = 100
     }
-    window.localStorage.setItem("tab", JSON.stringify(cart));
+    localStorage.setItem("tab", JSON.stringify(cart));
     return c
 });
 
@@ -104,7 +104,7 @@ const displaySofa = (sofaData) => {
                         }else return true
                     })
             }
-            window.localStorage.setItem("tab", JSON.stringify(cart));
+            localStorage.setItem("tab", JSON.stringify(cart));
             refresh()
         })
     }
@@ -117,7 +117,7 @@ const displaySofa = (sofaData) => {
                     return false
                 }else return true
                 })
-            window.localStorage.setItem("tab", JSON.stringify(cart));
+            localStorage.setItem("tab", JSON.stringify(cart));
             refresh()
         })
     }
@@ -215,7 +215,7 @@ for (const getAllForms of getForms) {
         .then((res) => res.json())
         .then((data) => {
             console.log(data)
-            window.location = 'confirmation.html' + '?orderId=' + data.orderId;
+            location = 'confirmation.html' + '?orderId=' + data.orderId;
         })
         }else {alert('Panier vide ou verifiez que tout les champs du formulaire soient valide')}
         
