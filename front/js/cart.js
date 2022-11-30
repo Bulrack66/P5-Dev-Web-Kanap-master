@@ -19,6 +19,13 @@ if (cart == null || cart == '') {
     cart = JSON.parse(localStorage.getItem("tab"));
     displayCart.innerHTML = '<h2 style= "display: flex;justify-content: center;border-radius: 10px;padding: 20px;background: white;color: rgb(51, 152, 219);font-weight: bold; padding-left: 10px; width: 53%;margin: 90px auto;">Panier vide ! Allez vite choisir un Kanap! 😉</h2>';
 }
+cart.map(c => {
+    if(c.quantity > 100){
+        c.quantity = 100
+    }
+    window.localStorage.setItem("tab", JSON.stringify(cart));
+    return c
+});
 
 let refresh = () => window.location.reload()
 let totalArticle = () => {
@@ -38,7 +45,6 @@ const getSofa = async () => {
 getSofa()
 
 const displaySofa = (sofaData) => {
-    let timOut = false;
     let mySofa = new Map();
     let i = 0
     cart.forEach(article=>{ 
@@ -74,12 +80,14 @@ const displaySofa = (sofaData) => {
     let newCart = [];
     for (const getQuantity of getQuantities) {
         getQuantity.addEventListener('input',(e) => {
+            if (e.target.value === '') {
+                return;
+            }
             let newItems = {
             _id : e.target.parentElement.parentElement.parentElement.parentElement.getAttribute('data-id'),
             color : e.target.parentElement.parentElement.parentElement.parentElement.getAttribute('data-color'),
             quantity : Number(e.target.value)
             }
-            // if(cart.quantity === 0){deleteProducts()}
             newCart.push(newItems);
             cart = cart.map(t =>{
                 if (t._id === newItems._id && t.color === newItems.color && newItems.quantity <= 100) {
@@ -87,17 +95,16 @@ const displaySofa = (sofaData) => {
                 }
             return t
             });
-            if(newItems.quantity == 0){
-                if(confirm('Voulez vous supprimer le produit?')){
+            console.log(e.target.value);
+            if( newItems.quantity === 0){
                     cart = cart.filter(cc => {
                         if(cc.quantity == 0){
                         return false
                         }else return true
                     })
-                }else{timOut = true}
             }
-            if (timOut){setTimeout(refresh, 3000)}else{setTimeout(refresh, 1000)}
             window.localStorage.setItem("tab", JSON.stringify(cart));
+            refresh()
         })
     }
     for (const deleteProduct of deleteProducts) {
@@ -108,8 +115,8 @@ const displaySofa = (sofaData) => {
                     return false
                 }else return true
                 })
-            window.location.reload()
             window.localStorage.setItem("tab", JSON.stringify(cart));
+            refresh()
         })
     }
     
@@ -121,44 +128,44 @@ let a3 = false;
 let a4 = false;
 let a5 = false;
 let sendForm = false;
-var formOk = '<div style="font-weight: 600; color: #3aff3a">Valide ✅</div>';
-var formNok = '<div style="font-weight: 600; color: red">'
+var formOk = 'Valide ✓';
 for (const getAllForms of getForms) {
     getAllForms.addEventListener('input', (e) => {
         
         let firstName   = getAllForms[0].value;
-        let firstNameRegEx = new RegExp(/^[A-Z][A-Za-z\é\è\ê\-]+$/g);
+        let firstNameRegEx = new RegExp(/^[a-zA-Z0-9|\s]{2,15}$/g);
         let testFirstName = firstNameRegEx.test(firstName);
         
         if (!testFirstName) {
             e.preventDefault();
-            errorFirstName.innerHTML = formNok + 'Prénom Incorrect (exemple: Jean-Edouard)</div>';
-            console.log(testFirstName)
+            errorFirstName.innerText = 'Prénom Incorrect (exemple: Jean-Edouard)';
+            a1 = false;
         }else{
-            errorFirstName.innerHTML = formOk;
+            errorFirstName.innerText = formOk;
             a1 = true;
         }        
         
         let lastName   = getAllForms[1].value;
-        let lastNameRegEx = new RegExp(/^[A-Z][A-Za-z\é\è\ê\-]+$/g);
+        let lastNameRegEx = new RegExp(/^[a-zA-Z0-9|\s]{2,15}$/g);
         let testLastName = lastNameRegEx.test(lastName);
         if (!testLastName) {
             e.preventDefault();
-            errorLastName.innerHTML = formNok + 'Nom Incorrect (exemple: Dupont)</div>';
-            
+            errorLastName.innerText = 'Nom Incorrect (exemple: Dupont)';
+            a2 = false;
         }else{
-            errorLastName.innerHTML = formOk;
+            errorLastName.innerText = formOk;
             a2 = true;
         }
         
         let adress   = getAllForms[2].value;
-        let adressRegEx = new RegExp(/^([1-9][0-9]*(?:-[1-9][0-9]*)*)[\s,-]+(?:(bis|ter|qua)[\s,-]+)?([\w]+[\-\w]*)[\s,]+([-\w].+)$/g);
+        let adressRegEx = new RegExp(/^([1-9][0-9]*(?:-[1-9][0-9]*)*)[\s,-]+(?:(bis|ter|qua)[\s,-]+)?([\w]+[\-\w]*)[\s,]+([-\w].+[^#\(\)])$/g);
         let testAdress = adressRegEx.test(adress);
         if (!testAdress) {
             e.preventDefault();
-            errorAdress.innerHTML = formNok + 'Adresse Incorrect (exemple: 1 rue Jean Jaures)</div>';
+            errorAdress.innerText = 'Adresse Incorrect (exemple: 1 rue Jean Jaures)';
+            a3 = false;
         }else{
-            errorAdress.innerHTML = formOk;
+            errorAdress.innerText = formOk;
             a3 = true;
         }
         
@@ -167,9 +174,10 @@ for (const getAllForms of getForms) {
         let testCity = cityRegEx.test(city);
         if (!testCity) {
             e.preventDefault();
-            errorCity.innerHTML = formNok + 'Ville Incorrect (exemple: Argeles-sur-Mer)</div>';
+            errorCity.innerText = `Ville Incorrect (exemple: L'Isle-en-Rigault)`;
+            a4 = false;
         }else{
-            errorCity.innerHTML = formOk;
+            errorCity.innerText = formOk;
             a4 = true;
         }
 
@@ -178,19 +186,20 @@ for (const getAllForms of getForms) {
         let testEmail = emailRegEx.test(email);
         if (!testEmail) {
             e.preventDefault();
-            errorEmail.innerHTML = formNok + 'Email Incorrect (exemple: je.dupont@gmail.com)</div>'
+            errorEmail.innerText = 'Email Incorrect (exemple: je.dupont@gmail.com)'
+            a5 = false;
         }else{
-            errorEmail.innerHTML = formOk;
+            errorEmail.innerText = formOk;
             a5 = true;
         }
         
-        if (a1 && a2 && a3 && a4 && a5) {
-            sendForm = true
-        }
     })
     
     getAllForms.addEventListener('submit', (e) => {
         e.preventDefault()
+        if (a1 && a2 && a3 && a4 && a5) {
+            sendForm = true
+        }
         if (sendForm && cart != null && cart != '') {
         const body = buildOrder();
         fetch(url + '/api/products/order', {
@@ -206,7 +215,7 @@ for (const getAllForms of getForms) {
             console.log(data)
             window.location = 'confirmation.html' + '?orderId=' + data.orderId;
         })
-        }else {alert('Panier vide ou verifiez que tout les champs du formulaire sois valide')}
+        }else {alert('Panier vide ou verifiez que tout les champs du formulaire soient valide')}
         
     });
 }
