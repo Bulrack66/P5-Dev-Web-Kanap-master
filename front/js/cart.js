@@ -16,7 +16,6 @@ if (cart == null || cart == '') {
     let tab = []
     localStorage.setItem("tab", JSON.stringify(tab));
     cart = JSON.parse(localStorage.getItem("tab"));
-    displayCart.innerHTML = '<h2 style= "display: flex;justify-content: center;border-radius: 10px;padding: 20px;background: white;color: rgb(51, 152, 219);font-weight: bold; padding-left: 10px; width: 53%;margin: 90px auto;">Panier vide ! Allez vite choisir un Kanap! 😉</h2>';
 }
 cart.map(c => {
     if(c.quantity > 100){
@@ -32,7 +31,7 @@ let totalArticle = () => {
     cart.forEach(a => {
         total += a.quantity
     });
-    totalQuantity.innerHTML = total;
+    totalQuantity.textContent = total;
 }
 
 const getSofa = async () => {
@@ -60,23 +59,41 @@ const displaySofa = (sofaData) => {
         })
         return mySofa
     })
-    mySofa.forEach(s =>{    
-        displayCart.innerHTML += `<article class="cart__item" data-id="${s._id}" data-color="${s.color}">
-        <div class="cart__item__img"><img src="${s.image}" alt="${s.alt}"></div>
-        <div class="cart__item__content"><div class="cart__item__content__description"><h2>${s.sofaName}</h2><p>${s.color}</p>
-        <p>${s.price} €</p></div><div class="cart__item__content__settings"><div class="cart__item__content__settings__quantity"><p>Qté :</p>
-        <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${s.quantity}"><div id="signal"></div>
-        </div><div class="cart__item__content__settings__delete"><p class="deleteItem">Supprimer</p></div></div></div></article>`
-        console.log(displayCart.closest('article'))
-    });
+    mySofa.forEach(sofa => {
+        const newSofa = document.createElement("article");
+                newSofa.setAttribute("class", "cart__item");
+                newSofa.setAttribute("data-id", sofa._id);
+                newSofa.setAttribute("data-color", sofa.color);
+                newSofa.innerHTML = `
+                    <div class="cart__item__img">
+                        <img src="${sofa.image}" alt="${sofa.alt}">
+                    </div>
+                    <div class="cart__item__content">
+                    <div class="cart__item__content__description">
+                        <h2>${sofa.sofaName}</h2>
+                        <p>${sofa.color}</p>
+                        <p>${sofa.price} €</p>
+                    </div>
+                    <div class="cart__item__content__settings">
+                        <div class="cart__item__content__settings__quantity">
+                        <p>Qté : </p>
+                        <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${sofa.quantity}">
+                        </div>
+                        <div class="cart__item__content__settings__delete">
+                        <p class="deleteItem">Supprimer</p>
+                        </div>
+                    </div>
+                    </div>`
+         displayCart.appendChild(newSofa);
+    })
     
     let totalSofaCartPrice = 0;
     mySofa.forEach(tp =>{
         totalSofaCartPrice += tp.totalPrice;
     });
-    totalPriceCart.innerHTML = totalSofaCartPrice;
+    totalPriceCart.textContent = totalSofaCartPrice;
     totalArticle();
-    let getQuantities = document.querySelectorAll('.itemQuantity');
+    let getQuantities = document.querySelectorAll('.itemQuantity')
    
     let newCart = [];
     for (const getQuantity of getQuantities) {
@@ -140,10 +157,10 @@ for (const getAllForms of getForms) {
         
         if (!testFirstName) {
             e.preventDefault();
-            errorFirstName.innerText = 'Prénom Incorrect (exemple: Jean-Edouard)';
+            errorFirstName.textContent = 'Prénom Incorrect (exemple: Jean-Edouard)';
             a1 = false;
         }else{
-            errorFirstName.innerText = formOk;
+            errorFirstName.textContent = formOk;
             a1 = true;
         }        
         
@@ -152,10 +169,10 @@ for (const getAllForms of getForms) {
         let testLastName = lastNameRegEx.test(lastName);
         if (!testLastName) {
             e.preventDefault();
-            errorLastName.innerText = 'Nom Incorrect (exemple: Dupont)';
+            errorLastName.textContent = 'Nom Incorrect (exemple: Dupont)';
             a2 = false;
         }else{
-            errorLastName.innerText = formOk;
+            errorLastName.textContent = formOk;
             a2 = true;
         }
         
@@ -164,10 +181,10 @@ for (const getAllForms of getForms) {
         let testAdress = adressRegEx.test(adress);
         if (!testAdress) {
             e.preventDefault();
-            errorAdress.innerText = 'Adresse Incorrect (exemple: 1 rue Jean Jaures)';
+            errorAdress.textContent = 'Adresse Incorrect (exemple: 1 rue Jean Jaures)';
             a3 = false;
         }else{
-            errorAdress.innerText = formOk;
+            errorAdress.textContent = formOk;
             a3 = true;
         }
         
@@ -176,10 +193,10 @@ for (const getAllForms of getForms) {
         let testCity = cityRegEx.test(city);
         if (!testCity) {
             e.preventDefault();
-            errorCity.innerText = `Ville Incorrect (exemple: L'Isle-en-Rigault)`;
+            errorCity.textContent = `Ville Incorrect (exemple: L'Isle-en-Rigault)`;
             a4 = false;
         }else{
-            errorCity.innerText = formOk;
+            errorCity.textContent = formOk;
             a4 = true;
         }
 
@@ -188,10 +205,10 @@ for (const getAllForms of getForms) {
         let testEmail = emailRegEx.test(email);
         if (!testEmail) {
             e.preventDefault();
-            errorEmail.innerText = 'Email Incorrect (exemple: je.dupont@gmail.com)'
+            errorEmail.textContent = 'Email Incorrect (exemple: je.dupont@gmail.com)'
             a5 = false;
         }else{
-            errorEmail.innerText = formOk;
+            errorEmail.textContent = formOk;
             a5 = true;
         }
         

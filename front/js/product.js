@@ -1,6 +1,10 @@
 const params = new URLSearchParams(window.location.search)
 const productId = params.get('id')
 const itemsToCart = document.getElementById('addToCart');
+const color = document.getElementById('colors');
+const productPicture     = document.querySelector('.item__img');
+const nomDuProduit       = document.getElementById('title');
+const prix       = document.getElementById('price');
 
 initAddToCart();
 
@@ -15,23 +19,26 @@ const getSofa = async () => {
 getSofa();
 
 const displaySofa = (sofaData) => {
-    const monImage     = document.querySelector('.item__img');
-    monImage.innerHTML = `<img src="${sofaData.imageUrl}" alt="Photographie d'un canapé ${sofaData.name}">`;
     
-    const nomDuProduit       = document.getElementById('title');
+    const insertPicture = document.createElement('img');
+    insertPicture.setAttribute('src', sofaData.imageUrl);
+    insertPicture.setAttribute('alt', sofaData.altTxt);
+    productPicture.appendChild(insertPicture);
+    
     nomDuProduit.textContent = `${sofaData.name}`;
 
     document.title = `${sofaData.name}`;
     
-    const prix       = document.getElementById('price');
     prix.textContent = `${sofaData.price}`;
     
     const description       = document.getElementById('description');
     description.textContent = `${sofaData.description}`;
     
     sofaData.colors.forEach((colors) => {
-        const couleurs = document.getElementById('colors');
-        couleurs.innerHTML += `<option value="${colors}">${colors}</option>`
+        addColor = document.createElement('option');
+        addColor.setAttribute('value', colors);
+        addColor.textContent = colors;
+        color.appendChild(addColor);
     });
     
 }
