@@ -135,7 +135,7 @@ for (const getAllForms of getForms) {
     getAllForms.addEventListener('input', (e) => {
         
         let firstName   = getAllForms[0].value;
-        let firstNameRegEx = new RegExp(/^[a-zA-Z0-9|\s]{2,15}$/g);
+        let firstNameRegEx = new RegExp(/^[a-zA-Z|\s]{2,15}$/g);
         let testFirstName = firstNameRegEx.test(firstName);
         
         if (!testFirstName) {
@@ -148,7 +148,7 @@ for (const getAllForms of getForms) {
         }        
         
         let lastName   = getAllForms[1].value;
-        let lastNameRegEx = new RegExp(/^[a-zA-Z0-9|\s]{2,15}$/g);
+        let lastNameRegEx = new RegExp(/^[a-zA-Z|\s]{2,15}$/g);
         let testLastName = lastNameRegEx.test(lastName);
         if (!testLastName) {
             e.preventDefault();
